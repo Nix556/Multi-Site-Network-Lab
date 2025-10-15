@@ -1,4 +1,12 @@
-# Skole netværk (Svendeprøve IT-supporter)
+# (Svendeprøve IT-supporter)
+
+## Beskrivelse
+
+Dette projekt handler om at opsætning og konfiguration et komplet multi-site firma-netværk med VLANs, OSPF-routing, NAT og Active Directory på virtuelle servere. Formålet er at simulere et realistisk firmamiljø, hvor flere afdelinger er forbundet via WAN-links, og hvor brugere og servere er organiseret efter afdeling og funktion.  
+
+Projektet er opdelt i tre sites: **Odense**, **Nyborg** og **Svendborg**. Odense fungerer som primært site med Internet-adgang, mens de andre sites forbindes via point-to-point WAN-links.  
+
+---
 
 ## VLAN & IP Plan
 
