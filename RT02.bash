@@ -28,14 +28,14 @@ interface GigabitEthernet0/0.99
  ip ospf 1 area 0
  exit
 
-! --- WAN LINK Odense↔Nyborg ---
+! --- WAN LINK Odense - Nyborg ---
 interface Serial0/0/0
  description Nyborg - Odense
  ip address 172.16.1.2 255.255.255.252
  ip ospf 1 area 0
  exit
 
-! --- Default route til Odense (for trafik mod internet eller servere) ---
+! --- Default route til Odense ---
 ip route 0.0.0.0 0.0.0.0 172.16.1.1
 
 ! --- OSPF ---
