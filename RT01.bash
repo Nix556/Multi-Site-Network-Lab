@@ -13,7 +13,15 @@ username admin privilege 15 secret cisco
 crypto key generate rsa modulus 2048
 ip ssh version 2
 
+
 ! --- LAN SUBINTERFACES ---
+interface GigabitEthernet0/0.100
+ description LAN
+ ip address 10.47.100.1 255.255.255.0
+ ip nat inside
+ no shutdown
+ exit
+
 interface GigabitEthernet0/0.10
  description VLAN 10 - Klient Odense
  encapsulation dot1Q 10
@@ -63,7 +71,7 @@ interface Serial0/0/1
 ! --- WAN / Internet uplink ---
 interface GigabitEthernet0/1
  description WAN uplink / ISP
- ip address DHCP
+ ip address 10.47.0.2 255.255.255.240
  ip nat outside
  no shutdown
  exit
@@ -77,6 +85,7 @@ access-list 10 permit 10.20.10.0 0.0.0.255
 access-list 10 permit 10.20.99.0 0.0.0.255
 access-list 10 permit 10.30.10.0 0.0.0.255
 access-list 10 permit 10.30.99.0 0.0.0.255
+access-list 10 permit 10.47.100.0 0.0.0.255
 
 ! --- NAT overload (PAT) for Internet adgang ---
 ip nat inside source list 10 interface GigabitEthernet0/1 overload
@@ -87,6 +96,7 @@ ip route 0.0.0.0 0.0.0.0 dhcp
 ! --- OSPF ---
 router ospf 1
  router-id 1.1.1.1
+ network 10.47.100.0 0.0.0.255 area 0
  network 10.10.10.0 0.0.0.255 area 0
  network 10.10.20.0 0.0.0.255 area 0
  network 10.10.30.0 0.0.0.255 area 0
