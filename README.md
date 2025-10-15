@@ -1,4 +1,4 @@
-# Skole Netværkslaboratorium
+# Skole Netværk
 
 ## Beskrivelse
 
