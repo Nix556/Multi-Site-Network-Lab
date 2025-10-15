@@ -68,11 +68,15 @@ interface GigabitEthernet0/1
  no shutdown
  exit
 
-! --- Opret en ACL for at tillade interne netværk ---
+! Opret ACL for alle interne subnets (Odense + Nyborg + Svendborg)
 access-list 10 permit 10.10.10.0 0.0.0.255
 access-list 10 permit 10.10.20.0 0.0.0.255
 access-list 10 permit 10.10.30.0 0.0.0.255
 access-list 10 permit 10.10.99.0 0.0.0.255
+access-list 10 permit 10.20.10.0 0.0.0.255
+access-list 10 permit 10.20.99.0 0.0.0.255
+access-list 10 permit 10.30.10.0 0.0.0.255
+access-list 10 permit 10.30.99.0 0.0.0.255
 
 ! --- NAT overload (PAT) for Internet adgang ---
 ip nat inside source list 10 interface GigabitEthernet0/1 overload
