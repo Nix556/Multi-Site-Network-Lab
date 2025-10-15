@@ -19,34 +19,34 @@ vlan 99
  exit
 
 ! --- Trunk-port til router RT01 ---
-interface GigabitEthernet0/1
+interface GigabitEthernet1/0/1
  switchport mode trunk
  switchport trunk allowed vlan 10,20,30,99
  exit
 
 ! --- Access-porte for klienter VLAN 10 ---
-interface range GigabitEthernet0/2 - 10
+interface range GigabitEthernet1/0/2 - 10
  switchport mode access
  switchport access vlan 10
  spanning-tree portfast
  exit
 
 ! --- Access-porte for servere VLAN 20 ---
-interface range GigabitEthernet0/11 - 12
+interface range GigabitEthernet1/0/11 - 12
  switchport mode access
  switchport access vlan 20
  spanning-tree portfast
  exit
 
 ! --- Access-porte for printere VLAN 30 ---
-interface range GigabitEthernet0/13 - 14
+interface range GigabitEthernet1/0/13 - 14
  switchport mode access
  switchport access vlan 30
  spanning-tree portfast
  exit
 
  ! --- Access-porte for management VLAN 99 ---
-interface range GigabitEthernet0/15 - 16
+interface range GigabitEthernet1/0/15 - 16
  switchport mode access
  switchport access vlan 99
  spanning-tree portfast
