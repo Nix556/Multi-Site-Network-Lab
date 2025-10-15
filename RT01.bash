@@ -91,7 +91,7 @@ access-list 10 permit 10.47.100.0 0.0.0.255
 ip nat inside source list 10 interface GigabitEthernet0/1 overload
 
 ! --- Default route (til ISP / upstream hvis relevant) ---
-ip route 0.0.0.0 0.0.0.0 dhcp
+ip route 0.0.0.0 0.0.0.0 10.47.0.1
 
 ! --- OSPF ---
 router ospf 1
