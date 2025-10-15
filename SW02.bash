@@ -5,18 +5,34 @@
 conf t
 
 hostname SW02
-ip domain-name nyborh.local
+ip domain-name nyborg.local
 
 ! --- VLANs ---
 vlan 10
  name Klient
+ exit
 vlan 99
  name Management
+ exit
+
+! --- Trunk-port til router RT02 ---
+interface GigabitEthernet0/1
+ switchport mode trunk
+ switchport trunk allowed vlan 10,99
+ exit
+
+! --- Access-porte for klienter VLAN 10 ---
+interface range GigabitEthernet0/2 - 10
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+ exit
 
 ! --- Management interface VLAN 99 ---
 interface vlan 99
  ip address 10.20.99.2 255.255.255.0
  no shutdown
+ exit
 
 ip default-gateway 10.20.99.1
 
