@@ -58,12 +58,14 @@ interface GigabitEthernet0/0.99
 interface Serial0/0/0
  description Odense - Nyborg
  ip address 172.16.1.1 255.255.255.252
+ no shutdown
  ip ospf 1 area 0
  exit
 
 interface Serial0/0/1
  description Odense - Svendborg
  ip address 172.16.2.1 255.255.255.252
+ no shutdown
  ip ospf 1 area 0
  exit
 
