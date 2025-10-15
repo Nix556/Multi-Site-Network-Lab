@@ -28,7 +28,7 @@ interface GigabitEthernet0/0.99
  ip ospf 1 area 0
  exit
 
-! --- WAN LINK Odense↔Svendborg ---
+! --- WAN LINK Odense - Svendborg ---
 interface Serial0/0/0
  description Svendborg - Odense
  ip address 172.16.2.2 255.255.255.252
