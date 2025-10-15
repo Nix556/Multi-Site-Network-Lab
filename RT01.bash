@@ -18,6 +18,7 @@ interface GigabitEthernet0/0.10
  description VLAN 10 - Klient Odense
  encapsulation dot1Q 10
  ip address 10.10.10.1 255.255.255.0
+ ip nat inside
  ip ospf 1 area 0
  exit
 
@@ -25,6 +26,7 @@ interface GigabitEthernet0/0.20
  description VLAN 20 - Server Odense
  encapsulation dot1Q 20
  ip address 10.10.20.1 255.255.255.0
+ ip nat inside
  ip ospf 1 area 0
  exit
 
@@ -32,6 +34,7 @@ interface GigabitEthernet0/0.30
  description VLAN 30 - Printer Odense
  encapsulation dot1Q 30
  ip address 10.10.30.1 255.255.255.0
+ ip nat inside
  ip ospf 1 area 0
  exit
 
@@ -39,6 +42,7 @@ interface GigabitEthernet0/0.99
  description VLAN 99 - Management Odense
  encapsulation dot1Q 99
  ip address 10.10.99.1 255.255.255.0
+ ip nat inside
  ip ospf 1 area 0
  exit
 
@@ -60,8 +64,18 @@ interface Serial0/0/1
 interface GigabitEthernet0/1
  description WAN uplink / ISP
  ip address DHCP
+ ip nat outside
  no shutdown
  exit
+
+! --- Opret en ACL for at tillade interne netværk ---
+access-list 10 permit 10.10.10.0 0.0.0.255
+access-list 10 permit 10.10.20.0 0.0.0.255
+access-list 10 permit 10.10.30.0 0.0.0.255
+access-list 10 permit 10.10.99.0 0.0.0.255
+
+! --- NAT overload (PAT) for Internet adgang ---
+ip nat inside source list 10 interface GigabitEthernet0/1 overload
 
 ! --- Default route (til ISP / upstream hvis relevant) ---
 ip route 0.0.0.0 0.0.0.0 dhcp
