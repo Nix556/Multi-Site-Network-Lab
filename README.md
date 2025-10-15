@@ -1,4 +1,4 @@
-# Skole Netværkslaboratorium
+# Skole netværk (Svendeprøve IT-supporter)
 
 ## VLAN & IP Plan
 
