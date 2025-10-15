@@ -30,5 +30,3 @@
 | ESXi Server  | Virtuelle servere DC1 & DC2, AD, DNS etc. | Odense site |
 
 ---
-
-Denne tabel kan bruges som en hurtig reference for netværkstopologi, IP-plan og roller på tværs af sites, så hele teamet nemt kan følge op på konfigurationen.
