@@ -13,13 +13,16 @@ username admin privilege 15 secret cisco
 crypto key generate rsa modulus 2048
 ip ssh version 2
 
-! --- LAN INTERFACE ---
+! ==========================
+! LAN Interface
+! ==========================
 interface GigabitEthernet0/0
- no shutdown
+ description LAN Nyborg
  no ip address
-exit
+ no shutdown
+ exit
 
-! --- LAN SUBINTERFACES ---
+! --- VLAN Subinterfaces ---
 interface GigabitEthernet0/0.10
  description VLAN 10 - Klient Nyborg
  encapsulation dot1Q 10
@@ -34,7 +37,9 @@ interface GigabitEthernet0/0.99
  ip ospf 1 area 0
  exit
 
-! --- WAN LINK Odense - Nyborg ---
+! ==========================
+! WAN Link Odense - Nyborg
+! ==========================
 interface Serial0/0/0
  description Nyborg - Odense
  ip address 172.16.1.2 255.255.255.252
@@ -42,10 +47,14 @@ interface Serial0/0/0
  ip ospf 1 area 0
  exit
 
-! --- Default route til Odense ---
+! ==========================
+! Default route
+! ==========================
 ip route 0.0.0.0 0.0.0.0 172.16.1.1
 
-! --- OSPF ---
+! ==========================
+! OSPF Routing
+! ==========================
 router ospf 1
  router-id 2.2.2.2
  network 10.20.10.0 0.0.0.255 area 0
@@ -55,7 +64,9 @@ router ospf 1
  passive-interface GigabitEthernet0/0.99
  exit
 
-! --- VTY / SSH adgang ---
+! ==========================
+! VTY / SSH Adgang
+! ==========================
 line vty 0 4
  transport input ssh
  login local
@@ -63,6 +74,10 @@ line vty 0 4
  logging synchronous
  exit
 
+! ==========================
+! Service Password Encryption
+! ==========================
 service password-encryption
+
 end
 write memory
