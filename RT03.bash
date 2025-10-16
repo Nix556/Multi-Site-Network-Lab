@@ -13,6 +13,12 @@ username admin privilege 15 secret cisco
 crypto key generate rsa modulus 2048
 ip ssh version 2
 
+! --- LAN INTERFACE ---
+interface GigabitEthernet0/0
+ no shutdown
+ no ip address
+exit
+
 ! --- LAN SUBINTERFACES ---
 interface GigabitEthernet0/0.10
  description VLAN 10 - Klient Svendborg
