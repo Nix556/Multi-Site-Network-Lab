@@ -7,6 +7,13 @@ conf t
 hostname SW02
 ip domain-name nyborg.local
 
+! --- Brugere til SSH ---
+username admin privilege 15 secret cisco
+
+! --- Generer nye RSA-nøgler ---
+crypto key generate rsa modulus 2048
+ip ssh version 2
+
 ! --- VLANs ---
 vlan 10
  name Klient
@@ -35,11 +42,6 @@ interface vlan 99
  exit
 
 ip default-gateway 10.20.99.1
-
-! --- SSH brugere ---
-username admin privilege 15 secret cisco
-crypto key generate rsa modulus 2048
-ip ssh version 2
 
 ! --- VTY linjer ---
 line vty 0 4
