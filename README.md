@@ -98,6 +98,8 @@ show run | include username    # Tjek eksisterende brugere
 show ip ssh                    # Tjek SSH-status
 ```
 
-
-
-
+**VLAN-forbindelse mellem sites**
+```bash
+ping <IP-adresse på anden site>   # Test WAN-links
+show cdp neighbors              # Tjek hvilke enheder der er fysisk koblet
+```
