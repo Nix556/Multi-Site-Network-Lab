@@ -32,6 +32,7 @@ interface GigabitEthernet0/0.99
 interface Serial0/0/0
  description Nyborg - Odense
  ip address 172.16.1.2 255.255.255.252
+ no shutdown
  ip ospf 1 area 0
  exit
 
