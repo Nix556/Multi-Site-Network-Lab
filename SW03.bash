@@ -39,6 +39,7 @@ interface range GigabitEthernet1/0/2 - 10
 interface vlan 99
  ip address 10.30.99.2 255.255.255.0
  no shutdown
+ exit
 
 ip default-gateway 10.30.99.1
 
