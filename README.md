@@ -38,3 +38,66 @@ Projektet er opdelt i tre sites: **Odense**, **Nyborg** og **Svendborg**. Odense
 | ESXi Server  | Virtuelle servere DC1 & DC2, AD, DNS etc. | Odense site |
 
 ---
+
+## Portplan
+### Odense (SW01)
+| Port         | VLAN | Beskrivelse                   | Kommentar                             |
+|-------------|------|--------------------------------|---------------------------------------|
+| Gi1/0/1     | Trunk | Til RT01 Gi0/1 (Router-on-a-Stick) | Tillader VLAN 10,20,30,99             |
+| Gi1/0/2-10  | 10   | Klient-PC’er                  | VLAN 10 – Klient                       |
+| Gi1/0/11-12 | 20   | Servere                        | VLAN 20 – Server                        |
+| Gi1/0/13-14 | 30   | Printere                       | VLAN 30 – Printer                        |
+| VLAN 99     | 99   | Management                     | IP: 10.10.99.2 / Gateway: 10.10.99.1  |
+
+### Nyborg (SW02)
+| Port        | VLAN | Beskrivelse                | Kommentar                             |
+|------------|------|----------------------------|---------------------------------------|
+| Gi0/1      | Trunk | Til RT02 Gi0/0 (Router)   | Tillader VLAN 10,99                    |
+| Gi0/2-10   | 10   | Klient-PC’er               | VLAN 10 – Klient                       |
+| VLAN 99    | 99   | Management                 | IP: 10.20.99.2 / Gateway: 10.20.99.1 |
+
+### Svendborg (SW03)
+| Port        | VLAN | Beskrivelse                | Kommentar                             |
+|------------|------|----------------------------|---------------------------------------|
+| Gi0/1      | Trunk | Til RT03 Gi0/0 (Router)   | Tillader VLAN 10,99                    |
+| Gi0/2-10   | 10   | Klient-PC’er               | VLAN 10 – Klient                       |
+| VLAN 99    | 99   | Management                 | IP: 10.30.99.2 / Gateway: 10.30.99.1 |
+
+---
+
+## Test & Verifikation
+
+Her er de vigtigste kommandoer til at tjekke, om netværket fungerer korrekt.
+
+### VLAN og interface status
+
+**På switch:**
+```bash
+show vlan brief          # Tjek at VLANs er oprettet
+show interfaces status   # Tjek at porte er oppe og tilknyttet de rigtige VLANs
+show interfaces trunk    # Tjek trunk-porte og hvilke VLANs der går igennem
+```
+
+**På router**
+```bash
+show ip interface brief  # Tjek at subinterfaces og IP-adresser er oppe
+ping <IP-adresse>        # Ping interne IP'er på VLAN/subnet for at teste forbindelse
+
+show ip ospf neighbor    # Tjek at OSPF naboer er oppe
+show ip route ospf       # Tjek hvilke ruter OSPF har lært
+
+show ip nat translations    # Tjek aktive NAT-oversættelser
+ping 8.8.8.8                # Tjek internetforbindelse
+traceroute 8.8.8.8          # Spor ruten ud til internettet
+```
+
+**SSH-adgang**
+```bash
+ssh admin@<switch_IP>      # Tjek SSH-login til switch
+show run | include username    # Tjek eksisterende brugere
+show ip ssh                    # Tjek SSH-status
+```
+
+
+
+
