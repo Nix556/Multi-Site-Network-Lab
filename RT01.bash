@@ -120,6 +120,9 @@ ip nat inside source static tcp 10.10.20.10 8006 interface GigabitEthernet0/0 80
 ! --- Proxmox SSH ---
 ip nat inside source static tcp 10.10.20.10 22 interface GigabitEthernet0/0 2222
 
+! --- Router 1 (SSH) ---
+ip nat inside source static tcp 10.10.99.1 22 interface GigabitEthernet0/0 2221
+
 ! --- Router 2 (SSH) ---
 ip nat inside source static tcp 10.20.99.1 22 interface GigabitEthernet0/0 2223
 
