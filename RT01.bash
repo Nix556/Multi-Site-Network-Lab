@@ -114,7 +114,7 @@ line vty 0 4
  logging synchronous
  exit
 
-! --- Proxmox Web-GUI ---
+! --- Proxmox Web ---
 ip nat inside source static tcp 10.10.20.10 8006 interface GigabitEthernet0/0 8006
 
 ! --- Proxmox SSH ---
@@ -126,14 +126,17 @@ ip nat inside source static tcp 10.10.99.1 22 interface GigabitEthernet0/0 2221
 ! --- Router 2 (SSH) ---
 ip nat inside source static tcp 10.20.99.1 22 interface GigabitEthernet0/0 2223
 
-! --- Switch 2 (SSH) ---
-ip nat inside source static tcp 10.20.99.2 22 interface GigabitEthernet0/0 2224
-
 ! --- Router 3 (SSH) ---
-ip nat inside source static tcp 10.30.99.1 22 interface GigabitEthernet0/0 2225
+ip nat inside source static tcp 10.30.99.1 22 interface GigabitEthernet0/0 2224
+
+! --- Switch 1 (SSH) ---
+ip nat inside source static tcp 10.10.99.2 22 interface GigabitEthernet0/0 2225
+
+! --- Switch 2 (SSH) ---
+ip nat inside source static tcp 10.20.99.2 22 interface GigabitEthernet0/0 2226
 
 ! --- Switch 3 (SSH) ---
-ip nat inside source static tcp 10.30.99.2 22 interface GigabitEthernet0/0 2226
+ip nat inside source static tcp 10.30.99.2 22 interface GigabitEthernet0/0 2227
 
 service password-encryption
 end
