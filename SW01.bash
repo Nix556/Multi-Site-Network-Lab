@@ -7,13 +7,24 @@ conf t
 hostname SW01
 ip domain-name odense.local
 
+! --- Brugere til SSH ---
+username admin privilege 15 secret cisco
+
+! --- Generer nye RSA-nøgler ---
+crypto key zeroize rsa
+crypto key generate rsa modulus 2048
+ip ssh version 2
+
 ! --- VLANs ---
 vlan 10
  name Klient
+ exit
 vlan 20
  name Server
+ exit
 vlan 30
  name Printer
+ exit
 vlan 99
  name Management
  exit
@@ -45,13 +56,6 @@ interface range GigabitEthernet1/0/13 - 14
  spanning-tree portfast
  exit
 
- ! --- Access-porte for management VLAN 99 ---
-interface range GigabitEthernet1/0/15 - 16
- switchport mode access
- switchport access vlan 99
- spanning-tree portfast
- exit
-
 ! --- Management interface VLAN 99 ---
 interface vlan 99
  ip address 10.10.99.2 255.255.255.0
@@ -59,10 +63,6 @@ interface vlan 99
 
 ip default-gateway 10.10.99.1
 
-! --- SSH brugere ---
-username admin privilege 15 secret cisco
-crypto key generate rsa modulus 2048
-ip ssh version 2
 
 ! --- VTY linjer ---
 line vty 0 4
