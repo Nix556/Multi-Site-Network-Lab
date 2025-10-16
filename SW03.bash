@@ -7,6 +7,13 @@ conf t
 hostname SW03
 ip domain-name svendborg.local
 
+! --- Brugere til SSH ---
+username admin privilege 15 secret cisco
+
+! --- Generer nye RSA-nøgler ---
+crypto key generate rsa modulus 2048
+ip ssh version 2
+
 ! --- VLANs ---
 vlan 10
  name Klient
@@ -33,11 +40,6 @@ interface vlan 99
  no shutdown
 
 ip default-gateway 10.30.99.1
-
-! --- SSH brugere ---
-username admin privilege 15 secret cisco
-crypto key generate rsa modulus 2048
-ip ssh version 2
 
 ! --- VTY linjer ---
 line vty 0 4
