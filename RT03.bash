@@ -38,6 +38,7 @@ interface GigabitEthernet0/0.99
 interface Serial0/1/0
  description Svendborg - Odense
  ip address 172.16.2.2 255.255.255.252
+ no shutdown
  ip ospf 1 area 0
  exit
 
