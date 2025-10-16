@@ -80,6 +80,7 @@ interface Serial0/0/1
 ip access-list extended NAT-LIST
  remark Tillad interne netværk til internettet
  deny ip 10.47.0.0 0.0.0.255 any
+ permit ip 10.47.0.0 0.0.0.255 10.47.0.2 255.255.255.240
  permit ip 10.0.0.0 0.255.255.255 any
  exit
 
