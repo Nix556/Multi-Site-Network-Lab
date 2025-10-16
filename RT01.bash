@@ -12,7 +12,6 @@ ip domain-name odense.local
 username admin privilege 15 secret cisco
 
 ! --- Generer nye RSA-nøgler ---
-crypto key zeroize rsa
 crypto key generate rsa modulus 2048
 ip ssh version 2
 
