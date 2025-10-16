@@ -11,12 +11,13 @@ ip domain-name odense.local
 ! --- Brugere til SSH ---
 username admin privilege 15 secret cisco
 
-! --- Generer nye RSA-nøgler ---
+! --- Generer RSA-nøgler til SSH ---
 crypto key generate rsa modulus 2048
 ip ssh version 2
 
-
-! --- WAN interface ---
+! ==========================
+! WAN Interface
+! ==========================
 interface GigabitEthernet0/0
  description WAN uplink / ISP
  ip address 10.47.0.2 255.255.255.240
@@ -24,7 +25,9 @@ interface GigabitEthernet0/0
  no shutdown
  exit
 
-! --- LAN interface (lokalt netværk 10.47.69.0/24) ---
+! ==========================
+! LAN Interface
+! ==========================
 interface GigabitEthernet0/1
  description LAN Odense
  ip address 10.47.69.1 255.255.255.0
@@ -32,7 +35,7 @@ interface GigabitEthernet0/1
  no shutdown
  exit
 
-! --- VLAN-subinterfaces på LAN-trunk ---
+! --- VLAN Subinterfaces ---
 interface GigabitEthernet0/1.10
  description VLAN 10 - Klient Odense
  encapsulation dot1Q 10
@@ -61,7 +64,9 @@ interface GigabitEthernet0/1.99
  ip nat inside
  exit
 
-! --- WAN-links mellem sites ---
+! ==========================
+! WAN-links mellem sites
+! ==========================
 interface Serial0/0/0
  description Odense - Nyborg
  ip address 172.16.1.1 255.255.255.252
@@ -76,7 +81,9 @@ interface Serial0/0/1
  ip ospf 1 area 0
  exit
 
-! --- ACL til NAT ---
+! ==========================
+! NAT ACL
+! ==========================
 ip access-list extended NAT-LIST
  remark Tillad interne netværk til internettet
  deny ip 10.47.0.0 0.0.0.255 any
@@ -84,13 +91,19 @@ ip access-list extended NAT-LIST
  permit ip 10.0.0.0 0.255.255.255 any
  exit
 
-! --- NAT overload ---
+! ==========================
+! NAT Overload
+! ==========================
 ip nat inside source list NAT-LIST interface GigabitEthernet0/0 overload
 
-! --- Default route til ISP ---
+! ==========================
+! Default route
+! ==========================
 ip route 0.0.0.0 0.0.0.0 10.47.0.1
 
-! --- OSPF konfiguration ---
+! ==========================
+! OSPF Routing
+! ==========================
 router ospf 1
  router-id 1.1.1.1
  network 10.47.0.0 0.0.255.255 area 0
@@ -106,7 +119,9 @@ router ospf 1
  passive-interface GigabitEthernet0/1.99
  exit
 
-! --- SSH adgang ---
+! ==========================
+! SSH Adgang
+! ==========================
 line vty 0 4
  transport input ssh
  login local
@@ -114,30 +129,30 @@ line vty 0 4
  logging synchronous
  exit
 
-! --- Proxmox Web ---
+! ==========================
+! Port Forwarding / NAT
+! ==========================
+! Proxmox Web
 ip nat inside source static tcp 10.10.20.10 8006 interface GigabitEthernet0/0 8006
-
-! --- Proxmox SSH ---
+! Proxmox SSH
 ip nat inside source static tcp 10.10.20.10 22 interface GigabitEthernet0/0 2222
-
-! --- Router 1 (SSH) ---
+! Router 1 (SSH)
 ip nat inside source static tcp 10.10.99.1 22 interface GigabitEthernet0/0 2221
-
-! --- Router 2 (SSH) ---
+! Router 2 (SSH)
 ip nat inside source static tcp 10.20.99.1 22 interface GigabitEthernet0/0 2223
-
-! --- Router 3 (SSH) ---
+! Router 3 (SSH)
 ip nat inside source static tcp 10.30.99.1 22 interface GigabitEthernet0/0 2224
-
-! --- Switch 1 (SSH) ---
+! Switch 1 (SSH)
 ip nat inside source static tcp 10.10.99.2 22 interface GigabitEthernet0/0 2225
-
-! --- Switch 2 (SSH) ---
+! Switch 2 (SSH)
 ip nat inside source static tcp 10.20.99.2 22 interface GigabitEthernet0/0 2226
-
-! --- Switch 3 (SSH) ---
+! Switch 3 (SSH)
 ip nat inside source static tcp 10.30.99.2 22 interface GigabitEthernet0/0 2227
 
+! ==========================
+! Service Password Encryption
+! ==========================
 service password-encryption
+
 end
 write memory
