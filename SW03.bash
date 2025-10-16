@@ -17,6 +17,7 @@ ip ssh version 2
 ! --- VLANs ---
 vlan 10
  name Klient
+ exit
 vlan 99
  name Management
  exit
