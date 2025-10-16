@@ -13,13 +13,16 @@ username admin privilege 15 secret cisco
 crypto key generate rsa modulus 2048
 ip ssh version 2
 
-! --- LAN INTERFACE ---
+! ==========================
+! LAN Interface
+! ==========================
 interface GigabitEthernet0/0
- no shutdown
+ description LAN Svendborg
  no ip address
-exit
+ no shutdown
+ exit
 
-! --- LAN SUBINTERFACES ---
+! --- VLAN Subinterfaces ---
 interface GigabitEthernet0/0.10
  description VLAN 10 - Klient Svendborg
  encapsulation dot1Q 10
@@ -34,7 +37,9 @@ interface GigabitEthernet0/0.99
  ip ospf 1 area 0
  exit
 
-! --- WAN LINK Odense - Svendborg ---
+! ==========================
+! WAN Link Odense - Svendborg
+! ==========================
 interface Serial0/1/0
  description Svendborg - Odense
  ip address 172.16.2.2 255.255.255.252
@@ -42,10 +47,14 @@ interface Serial0/1/0
  ip ospf 1 area 0
  exit
 
-! --- Default route til Odense (for trafik mod internet / servere) ---
+! ==========================
+! Default route
+! ==========================
 ip route 0.0.0.0 0.0.0.0 172.16.2.1
 
-! --- OSPF ---
+! ==========================
+! OSPF Routing
+! ==========================
 router ospf 1
  router-id 3.3.3.3
  network 10.30.10.0 0.0.0.255 area 0
@@ -55,7 +64,9 @@ router ospf 1
  passive-interface GigabitEthernet0/0.99
  exit
 
-! --- VTY / SSH adgang ---
+! ==========================
+! VTY / SSH Adgang
+! ==========================
 line vty 0 4
  transport input ssh
  login local
@@ -63,6 +74,10 @@ line vty 0 4
  logging synchronous
  exit
 
+! ==========================
+! Service Password Encryption
+! ==========================
 service password-encryption
+
 end
 write memory
