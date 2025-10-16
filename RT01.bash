@@ -132,10 +132,6 @@ line vty 0 4
 ! ==========================
 ! Port Forwarding / NAT
 ! ==========================
-! Proxmox Web
-ip nat inside source static tcp 10.10.20.5 8006 interface GigabitEthernet0/0 8006
-! Proxmox SSH
-ip nat inside source static tcp 10.10.20.5 22 interface GigabitEthernet0/0 2222
 ! Router 1 (SSH)
 ip nat inside source static tcp 10.10.99.1 22 interface GigabitEthernet0/0 2221
 ! Router 2 (SSH)
