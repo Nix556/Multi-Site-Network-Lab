@@ -1,0 +1,48 @@
+Forward:
+no ip nat inside source static tcp 10.10.99.1 22 interface GigabitEthernet0/0 2221
+no ip nat inside source static tcp 10.20.99.1 22 interface GigabitEthernet0/0 2223
+no ip nat inside source static tcp 10.30.99.1 22 interface GigabitEthernet0/0 2224
+no ip nat inside source static tcp 10.20.99.2 22 interface GigabitEthernet0/0 2226
+no ip nat inside source static tcp 10.30.99.2 22 interface GigabitEthernet0/0 2227
+no ip nat inside source static tcp 10.10.99.2 22 interface GigabitEthernet0/0 2231
+
+OSPF:
+no network 10.47.0.0 0.0.255.255 area 0
+
+Default route
+no ip route 0.0.0.0 0.0.0.0 10.47.0.1
+ip route 0.0.0.0 0.0.0.0 dhcp
+
+! ==========================
+! WAN Interface
+! ==========================
+interface GigabitEthernet0/0
+ description WAN uplink / ISP
+ ip address DHCP
+ ip nat outside
+ no shutdown
+ exit
+
+
+! ==========================
+! LAN Interface
+! ==========================
+interface GigabitEthernet0/1
+ description LAN Odense
+ no ip address
+ no ip nat inside
+ no shutdown
+ exit
+
+ACL:
+access-list 10 permit 10.10.10.0 0.0.0.255 
+access-list 10 permit 10.10.20.0 0.0.0.255
+access-list 10 permit 10.10.30.0 0.0.0.255 
+access-list 10 permit 10.10.99.0 0.0.0.255 
+access-list 10 permit 10.20.10.0 0.0.0.255 
+access-list 10 permit 10.20.99.0 0.0.0.255 
+access-list 10 permit 10.30.10.0 0.0.0.255 
+access-list 10 permit 10.30.99.0 0.0.0.255
+
+NAT:
+ip nat inside source list 10 interface GigabitEthernet0/1 overload
