@@ -40,7 +40,7 @@ interface GigabitEthernet0/0.99
 ! ==========================
 ! WAN Link Odense - Nyborg
 ! ==========================
-interface Serial0/0/0
+interface Serial0/1/0
  description Nyborg - Odense
  ip address 172.16.1.2 255.255.255.252
  no shutdown
