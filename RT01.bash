@@ -22,6 +22,15 @@ interface GigabitEthernet0/0
  no shutdown
  exit
 
+ ==========================
+! LAN Interface
+! ==========================
+interface GigabitEthernet0/1
+ description Trunk til SW01 (Odense)
+ no ip address
+ no shutdown
+ exit
+
 ! ==========================
 ! VLAN Subinterfaces (LAN)
 ! ==========================
