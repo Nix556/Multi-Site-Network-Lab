@@ -35,7 +35,7 @@ Projektet er opdelt i tre sites: **Odense**, **Nyborg** og **Svendborg**. Odense
 | SW01         | VLAN konfiguration, trunk til RT01         | Odense site |
 | SW02         | VLAN konfiguration, trunk til RT02         | Nyborg site |
 | SW03         | VLAN konfiguration, trunk til RT03         | Svendborg site |
-| ESXi Server  | Virtuelle servere DC1 & DC2, AD, DNS etc. | Odense site |
+| Proxmox Server  | Virtuelle servere DC1 & DC2, AD, DNS etc. | Odense site |
 
 ---
 
