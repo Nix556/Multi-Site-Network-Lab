@@ -32,13 +32,14 @@ interface GigabitEthernet0/1
  exit
 
 ! ==========================
-! VLAN Subinterfaces (LAN)
+! VLAN Subinterfaces (LAN) med DHCP relay
 ! ==========================
 interface GigabitEthernet0/1.10
  description VLAN 10 - Klient Odense
  encapsulation dot1Q 10
  ip address 10.10.10.1 255.255.255.0
  ip nat inside
+ ip helper-address 10.10.20.10
  exit
 
 interface GigabitEthernet0/1.20
@@ -53,6 +54,7 @@ interface GigabitEthernet0/1.30
  encapsulation dot1Q 30
  ip address 10.10.30.1 255.255.255.0
  ip nat inside
+ ip helper-address 10.10.20.10
  exit
 
 interface GigabitEthernet0/1.99
