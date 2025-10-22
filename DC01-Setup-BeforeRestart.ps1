@@ -4,13 +4,6 @@
 #>
 
 # ------------------------------
-# 0. SÆT SERVERNAVN TIL DC01
-# ------------------------------
-$NewComputerName = "DC01"
-Rename-Computer -NewName $NewComputerName -Force -Restart:$false
-Write-Host "Servernavn sat til $NewComputerName" -ForegroundColor Green
-
-# ------------------------------
 # 1. NETVÆRKSOPSÆTNING
 # ------------------------------
 $interface = "Ethernet"
