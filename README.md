@@ -136,3 +136,80 @@ Install-ADDSForest `
     -InstallDNS `
     -Force:$true
 ```
+
+**Opsæt DHCP scopes og option values**
+```
+Add-DhcpServerInDC -DnsName "DC01.torbenbyg.local" -IpAddress 10.10.20.10 
+
+# Opret scopes for Odense, Nyborg og Svendborg
+Add-DhcpServerv4Scope -Name "Odense" -StartRange 10.10.10.100 -EndRange 10.10.10.200 -SubnetMask 255.255.255.0
+Set-DhcpServerv4OptionValue -ScopeId 10.10.10.0 -Router 10.10.10.1 -DnsServer 10.10.20.10
+# Gentag for Nyborg og Svendborg scopes
+```
+
+**Opret OU’er, brugere og grupper**
+```
+$OUlist = "ingeniør","tømmer","murer","elektriker","lærling","sekretær","leder"
+
+# Opret OU’er
+foreach ($ou in $OUlist) {
+    New-ADOrganizationalUnit -Name $ou -Path "DC=torbenbyg,DC=local"
+}
+
+# Opret fiktive brugere og grupper
+# Se fuldt script i 'DC01-Setup.ps1'
+```
+
+### DC02 – Sekundær Domain Controller / Failover
+**Før genstart – netværk og roller**
+```
+# Tildel statisk IP og DNS (peger på DC01)
+New-NetIPAddress -InterfaceAlias "Ethernet" -IPAddress 10.10.20.11 -PrefixLength 24 -DefaultGateway 10.10.20.1
+Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ServerAddresses 10.10.20.10,1.1.1.1
+
+# Installer AD DS, DNS og DHCP
+Install-WindowsFeature -Name AD-Domain-Services, DNS, DHCP -IncludeManagementTools
+```
+
+**Promover som additional DC**
+```
+$DomainName = "torbenbyg.local"
+$DC01 = "DC01.torbenbyg.local"
+
+Install-ADDSDomainController `
+    -DomainName $DomainName `
+    -Credential (Get-Credential) `
+    -InstallDNS `
+    -ReplicationSourceDC $DC01 `
+    -Force:$true
+```
+
+**Efter genstart – kontrol og DHCP failover**
+```
+# Bekræft AD og DNS replikation
+repadmin /replsummary
+Get-ADDomainController -Filter *
+
+# Opsæt DHCP failover med DC01
+$PartnerServer = "DC01"
+$LocalDHCPServer = $env:COMPUTERNAME
+
+Add-DhcpServerv4Failover -Name "DHCP-Failover" `
+    -PartnerServer $PartnerServer `
+    -Mode LoadBalance `
+    -LoadBalancePercent 50 `
+    -ScopeId 10.10.10.0,10.20.10.0,10.30.10.0 `
+    -Force
+
+# Bekræft failover
+Get-DhcpServerv4Failover
+```
+
+### Kørsel af scripts
+DC01: Kør DC01-BeforeRestart.ps1, genstart, og kør evt. DC01-AfterRestart.ps1.
+DC02: Kør DC02-BeforeRestart.ps1, genstart, og kør DC02-AfterRestart.ps1.
+Verificér replication, DNS og DHCP med kommandoer som:
+```
+repadmin /replsummary
+Get-DhcpServerv4Failover
+```
