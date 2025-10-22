@@ -6,6 +6,13 @@
 #>
 
 # ------------------------------
+# 0. SÆT SERVERNAVN TIL DC02
+# ------------------------------
+$NewComputerName = "DC02"
+Rename-Computer -NewName $NewComputerName -Force -Restart:$false
+Write-Host "Servernavn sat til $NewComputerName" -ForegroundColor Green
+
+# ------------------------------
 # 1. NETVÆRKSOPSÆTNING
 # ------------------------------
 $interface = "Ethernet"
@@ -36,4 +43,7 @@ Install-ADDSDomainController `
     -ReplicationSourceDC $DC01 `
     -Force:$true
 
+# ------------------------------
+# GENSTART PÅKRÆVET EFTER DC PROMOTION
+# ------------------------------
 Write-Host "Genstart serveren nu for at fuldføre promotion som sekundær DC!" -ForegroundColor Yellow
