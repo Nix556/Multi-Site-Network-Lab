@@ -103,3 +103,36 @@ show ip ssh                    # Tjek SSH-status
 ping <IP-adresse på anden site>   # Test WAN-links
 show cdp neighbors              # Tjek hvilke enheder der er fysisk koblet
 ```
+
+---
+
+## Domain Controller Opsætning med PowerShell
+
+Dette projekt bruger PowerShell-scripts til at opsætte **AD DS, DNS og DHCP** på de virtuelle servere DC01 og DC02. DC01 er primær Domain Controller, mens DC02 fungerer som sekundær/failover DC for AD, DNS og DHCP.
+
+### DC01 – Primær Domain Controller
+
+**Første skridt – netværk og serverroller**
+```powershell
+# Tildel statisk IP og DNS
+New-NetIPAddress -InterfaceAlias "Ethernet" -IPAddress 10.10.20.10 -PrefixLength 24 -DefaultGateway 10.10.20.1
+Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ServerAddresses 10.10.20.10,1.1.1.1
+
+# Slå IPv6 fra
+Disable-NetAdapterBinding -Name "Ethernet" -ComponentID ms_tcpip6
+
+# Installer AD DS, DNS, DHCP og File Server roller
+Install-WindowsFeature -Name AD-Domain-Services, DNS, FS-FileServer, DHCP -IncludeManagementTools
+```
+
+**Promover serveren til Domain Controller**
+```
+$DomainName = "torbenbyg.local"
+$DSRMPassword = ConvertTo-SecureString "torbenDSRM!2025" -AsPlainText -Force
+
+Install-ADDSForest `
+    -DomainName $DomainName `
+    -SafeModeAdministratorPassword $DSRMPassword `
+    -InstallDNS `
+    -Force:$true
+```
