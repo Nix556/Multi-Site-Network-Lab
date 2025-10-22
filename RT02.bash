@@ -27,6 +27,7 @@ interface GigabitEthernet0/0.10
  description VLAN 10 - Klient Nyborg
  encapsulation dot1Q 10
  ip address 10.20.10.1 255.255.255.0
+ ip helper-address 10.10.20.10
  ip ospf 1 area 0
  exit
 
