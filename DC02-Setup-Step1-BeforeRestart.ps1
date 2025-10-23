@@ -13,11 +13,8 @@ $Prefix      = 24
 $Gateway     = "10.10.20.1"
 $DnsServers  = @("10.10.20.10", "1.1.1.1")
 
-# Fjern gammel IP og sæt ny
-if (Get-NetIPAddress -InterfaceAlias $Interface -ErrorAction SilentlyContinue) {
-    Get-NetIPAddress -InterfaceAlias $Interface -ErrorAction SilentlyContinue | Remove-NetIPAddress -Confirm:$false
-}
-New-NetIPAddress -InterfaceAlias $Interface -IPAddress $IPAddress -PrefixLength $Prefix -DefaultGateway $Gateway
+# Sæt IP-konfiguration (uden at fjerne eksisterende IP først)
+New-NetIPAddress -InterfaceAlias $Interface -IPAddress $IPAddress -PrefixLength $Prefix -DefaultGateway $Gateway -ErrorAction SilentlyContinue
 Set-DnsClientServerAddress -InterfaceAlias $Interface -ServerAddresses $DnsServers
 
 # Deaktiver IPv6 (valgfrit)
