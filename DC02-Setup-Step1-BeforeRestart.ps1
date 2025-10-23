@@ -11,7 +11,7 @@ $Interface   = "Ethernet"
 $IPAddress   = "10.10.20.11"
 $Prefix      = 24
 $Gateway     = "10.10.20.1"
-$DnsServers  = @("10.10.20.10", "1.1.1.1")
+$DnsServers  = @("10.10.20.10")
 
 # Sæt IP-konfiguration (uden at fjerne eksisterende IP først)
 New-NetIPAddress -InterfaceAlias $Interface -IPAddress $IPAddress -PrefixLength $Prefix -DefaultGateway $Gateway -ErrorAction SilentlyContinue
