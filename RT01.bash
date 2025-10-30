@@ -3,7 +3,7 @@
 ! ==========================
 conf t
 
-! --- Hostname og domæne ---
+! --- Hostname and domain ---
 hostname RT01
 ip domain-name odense.local
 
@@ -22,20 +22,20 @@ interface GigabitEthernet0/0
  no shutdown
  exit
 
- ==========================
+! ==========================
 ! LAN Interface
 ! ==========================
 interface GigabitEthernet0/1
- description Trunk til SW01 (Odense)
+ description Trunk to SW01 (Odense)
  no ip address
  no shutdown
  exit
 
 ! ==========================
-! VLAN Subinterfaces (LAN) med DHCP relay
+! VLAN Subinterfaces (LAN) with DHCP relay
 ! ==========================
 interface GigabitEthernet0/1.10
- description VLAN 10 - Klient Odense
+ description VLAN 10 - Client Odense
  encapsulation dot1Q 10
  ip address 10.10.10.1 255.255.255.0
  ip nat inside
@@ -65,7 +65,7 @@ interface GigabitEthernet0/1.99
  exit
 
 ! ==========================
-! WAN-links mellem sites
+! WAN links between sites
 ! ==========================
 interface Serial0/0/0
  description Odense - Nyborg
@@ -85,7 +85,7 @@ interface Serial0/0/1
 ! NAT ACL
 ! ==========================
 ip access-list extended NAT-LIST
- remark Tillad interne netværk til internettet
+ remark Allow internal networks to access the Internet
  permit ip 10.0.0.0 0.255.255.255 any
  exit
 
@@ -95,7 +95,7 @@ ip access-list extended NAT-LIST
 ip nat inside source list NAT-LIST interface GigabitEthernet0/0 overload
 
 ! ==========================
-! Standard route
+! Default route
 ! ==========================
 ip route 0.0.0.0 0.0.0.0 dhcp
 
@@ -117,7 +117,7 @@ router ospf 1
  exit
 
 ! ==========================
-! SSH-adgang
+! SSH access
 ! ==========================
 line vty 0 4
  login local
@@ -127,7 +127,7 @@ line vty 0 4
  exit
 
 ! ==========================
-! Kryptering
+! Encryption
 ! ==========================
 service password-encryption
 
