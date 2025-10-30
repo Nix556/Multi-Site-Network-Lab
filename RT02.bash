@@ -4,11 +4,11 @@
 
 conf t
 
-! --- Hostname og domæne ---
+! --- Hostname and domain ---
 hostname RT02
 ip domain-name nyborg.local
 
-! --- Brugere til SSH ---
+! --- SSH Users ---
 username admin privilege 15 secret cisco
 crypto key generate rsa modulus 2048
 ip ssh version 2
@@ -24,7 +24,7 @@ interface GigabitEthernet0/0
 
 ! --- VLAN Subinterfaces ---
 interface GigabitEthernet0/0.10
- description VLAN 10 - Klient Nyborg
+ description VLAN 10 - Client Nyborg
  encapsulation dot1Q 10
  ip address 10.20.10.1 255.255.255.0
  ip helper-address 10.10.20.10
@@ -66,7 +66,7 @@ router ospf 1
  exit
 
 ! ==========================
-! VTY / SSH Adgang
+! VTY / SSH Access
 ! ==========================
 line vty 0 4
  transport input ssh
