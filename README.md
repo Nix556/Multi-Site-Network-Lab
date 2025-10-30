@@ -5,7 +5,6 @@
 ![Virtualization](https://img.shields.io/badge/virtualization-Proxmox-yellow)
 ![Language](https://img.shields.io/badge/language-PowerShell-lightgrey)
 ![License](https://img.shields.io/badge/license-MIT-green)
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
 
 ---
 
