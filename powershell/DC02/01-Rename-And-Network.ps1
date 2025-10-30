@@ -1,11 +1,11 @@
 <#
 .SYNOPSIS
-    Omdøber DC02 og konfigurerer netværk.
+    Renames DC02 and configures network settings.
 #>
 
-Write-Host "=== Trin 1: Navngiver server og opsætter netværk ===" -ForegroundColor Cyan
+Write-Host "=== Step 1: Renaming server and configuring network ===" -ForegroundColor Cyan
 
-# Indstillinger
+# Settings
 $NewName     = "DC02"
 $Interface   = "Ethernet"
 $IPAddress   = "10.10.20.11"
@@ -13,15 +13,15 @@ $Prefix      = 24
 $Gateway     = "10.10.20.1"
 $DnsServers  = @("10.10.20.10")
 
-# Sæt IP-konfiguration (uden at fjerne eksisterende IP først)
+# Set IP configuration
 New-NetIPAddress -InterfaceAlias $Interface -IPAddress $IPAddress -PrefixLength $Prefix -DefaultGateway $Gateway -ErrorAction SilentlyContinue
 Set-DnsClientServerAddress -InterfaceAlias $Interface -ServerAddresses $DnsServers
 
-# Deaktiver IPv6 (valgfrit)
+# Disable IPv6 (optional)
 Disable-NetAdapterBinding -Name $Interface -ComponentID ms_tcpip6 -ErrorAction SilentlyContinue
 
-# Omdøb maskinen
+# Rename the computer
 Rename-Computer -NewName $NewName -Force
 
-Write-Host "Servernavn ændret til $NewName. Genstarter nu..." -ForegroundColor Yellow
+Write-Host "Server name changed to $NewName. Restarting now..." -ForegroundColor Yellow
 Restart-Computer -Force
