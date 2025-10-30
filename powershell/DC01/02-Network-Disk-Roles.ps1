@@ -1,10 +1,10 @@
 <#
 .SYNOPSIS
-    Opsætning af netværk, disk og roller før promotion
+    Configures network, prepares disk, and installs roles before domain promotion.
 #>
 
 # ------------------------------
-# 1. NETVÆRKSOPSÆTNING
+# 1. NETWORK CONFIGURATION
 # ------------------------------
 $interface = "Ethernet"
 $ipAddress = "10.10.20.10"
@@ -17,7 +17,7 @@ Set-DnsClientServerAddress -InterfaceAlias $interface -ServerAddresses $dnsServe
 Disable-NetAdapterBinding -Name $interface -ComponentID ms_tcpip6
 
 # ------------------------------
-# 2. OPRET PARTITION F:
+# 2. CREATE DATA PARTITION F:
 # ------------------------------
 $diskNumber = 1
 $driveLetter = "F"
@@ -28,9 +28,9 @@ Format-Volume -Partition $part -FileSystem NTFS -NewFileSystemLabel "UserData" -
 Set-Partition -PartitionNumber $part.PartitionNumber -DiskNumber $diskNumber -NewDriveLetter $driveLetter
 
 # ------------------------------
-# 3. INSTALLER SERVERROLLER
+# 3. INSTALL SERVER ROLES
 # ------------------------------
 Install-WindowsFeature -Name AD-Domain-Services, DNS, FS-FileServer, DHCP -IncludeManagementTools
 
-Write-Host "Færdig – genstart nu før promotion." -ForegroundColor Yellow
+Write-Host "Setup complete — restart before domain promotion." -ForegroundColor Yellow
 Restart-Computer
