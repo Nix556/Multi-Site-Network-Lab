@@ -1,12 +1,12 @@
 <#
 .SYNOPSIS
-    Opsætning af DC01 efter promotion til Domain Controller.
+    Post-promotion setup of DC01 after it becomes the Domain Controller.
 #>
 
-Write-Host "=== DC01: Post-promotion opsætning ===" -ForegroundColor Cyan
+Write-Host "=== DC01: Post-promotion configuration ===" -ForegroundColor Cyan
 
 # ------------------------------
-# 1. KONFIGURER DHCP
+# 1. DHCP CONFIGURATION
 # ------------------------------
 $ipAddress = "10.10.20.10"
 Add-DhcpServerInDC -DnsName "DC01.torbenbyg.local" -IpAddress $ipAddress
@@ -27,19 +27,19 @@ Start-Service DHCPServer
 Get-DhcpServerv4Scope
 
 # ------------------------------
-# 2. OPRET MAPPESTRUKTUR
+# 2. CREATE FOLDER STRUCTURE
 # ------------------------------
 $OUlist = "ingeniør","tømmer","murer","elektriker","lærling","sekretær","leder"
 $driveLetter = "F"
 foreach ($ou in $OUlist) { New-Item -Path "$driveLetter:\$ou" -ItemType Directory -Force }
 
 # ------------------------------
-# 3. OPRET OU'ER
+# 3. CREATE ORGANIZATIONAL UNITS
 # ------------------------------
 foreach ($ou in $OUlist) { New-ADOrganizationalUnit -Name $ou -Path "DC=torbenbyg,DC=local" }
 
 # ------------------------------
-# 4. OPRET BRUGERE
+# 4. CREATE USERS
 # ------------------------------
 $usersPerOU = 6
 foreach ($ou in $OUlist) {
@@ -52,7 +52,7 @@ foreach ($ou in $OUlist) {
 }
 
 # ------------------------------
-# 5. OPRET GRUPPER OG TILDEL BRUGERE
+# 5. CREATE GROUPS AND ADD USERS
 # ------------------------------
 foreach ($ou in $OUlist) {
     $globalGroup = "GG_$ou"
@@ -67,7 +67,7 @@ foreach ($ou in $OUlist) {
 }
 
 # ------------------------------
-# 6. ADGANG TIL MAPPER
+# 6. FOLDER PERMISSIONS
 # ------------------------------
 foreach ($ou in $OUlist) {
     $folderPath = "$driveLetter:\$ou"
@@ -79,7 +79,7 @@ foreach ($ou in $OUlist) {
 }
 
 # ------------------------------
-# 7. SMB-SHARES
+# 7. SMB SHARES
 # ------------------------------
 foreach ($ou in $OUlist) {
     $folderPath = "$driveLetter:\$ou"
@@ -93,24 +93,24 @@ foreach ($ou in $OUlist) {
 }
 
 # ------------------------------
-# 8. PASSWORDPOLITIK
+# 8. PASSWORD POLICY
 # ------------------------------
 Set-ADDefaultDomainPasswordPolicy -Identity "torbenbyg.local" -MinPasswordLength 10
 Set-ADDefaultDomainPasswordPolicy -Identity "torbenbyg.local" -ComplexityEnabled $true
 Set-ADDefaultDomainPasswordPolicy -Identity "torbenbyg.local" -MaxPasswordAge (New-TimeSpan -Days 27)
 
 # ------------------------------
-# 9. GPO: Skjul sidste bruger
+# 9. GPO: Hide Last Logged-In User
 # ------------------------------
 Import-Module GroupPolicy
-$gpo = New-GPO -Name "HideLastUserName" -Comment "Skjul sidste bruger på login-skærmen"
+$gpo = New-GPO -Name "HideLastUserName" -Comment "Hide last user on login screen"
 Set-GPRegistryValue -Name $gpo.DisplayName `
     -Key "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" `
     -ValueName "DontDisplayLastUserName" -Type DWord -Value 1
 New-GPLink -Name $gpo.DisplayName -Target "DC=torbenbyg,DC=local"
 
 # ------------------------------
-# 10. EKSTRA ADMIN & SERVEROPERATOR
+# 10. CREATE ADMIN & OPERATOR ACCOUNTS
 # ------------------------------
 $operatorPassword = ConvertTo-SecureString "Server1234!" -AsPlainText -Force
 $adminPassword    = ConvertTo-SecureString "Admin12345!" -AsPlainText -Force
@@ -122,7 +122,7 @@ Add-ADGroupMember -Identity "Domain Admins" -Members "Admin-J"
 Add-ADGroupMember -Identity "Server Operators" -Members "ServerOP"
 
 # ------------------------------
-# 11. DELEGÉR SUPERBRUGERE
+# 11. DELEGATE OU SUPERUSERS
 # ------------------------------
 Import-Module ActiveDirectory
 foreach ($ou in $OUlist) {
@@ -132,8 +132,8 @@ foreach ($ou in $OUlist) {
         $userSam = "torbenbyg\" + $superUser.SamAccountName
         dsacls $ouDN /G "$userSam:RPWP" | Out-Null
         dsacls $ouDN /G "$userSam:CCDC" | Out-Null
-        Write-Host "Delegerede rettigheder til $($superUser.SamAccountName) i $ou." -ForegroundColor Green
+        Write-Host "Delegated rights to $($superUser.SamAccountName) in $ou." -ForegroundColor Green
     }
 }
 
-Write-Host "DC01-opsætning fuldført!" -ForegroundColor Green
+Write-Host "DC01 setup complete!" -ForegroundColor Green
