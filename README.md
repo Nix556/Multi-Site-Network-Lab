@@ -1,18 +1,16 @@
-# (Svendeprøve IT-supporter)  
+# (Svendeprøve IT-supporter) 🚀
 
-## Overview
+## Overview 🌐
 
 This project demonstrates the setup and configuration of a multi-site corporate network with VLANs, OSPF routing, NAT, and Active Directory on virtual servers. The goal is to simulate a realistic corporate environment where multiple departments are connected via WAN links, with users and servers organized by department and function.
 
 **Sites:** Odense (primary, Internet-connected), Nyborg, Svendborg
 
-**Note:** Routers and switches are **physical hardware**, while Domain Controllers are virtualized.
-
 ---
 
-## Network Design
+## Network Design 🗺️
 
-### VLAN & IP Plan
+### VLAN & IP Plan 💻
 
 | Site      | VLAN | Subnet        | Device/Role | IP Address | Notes                        |
 |----------|------|---------------|------------|-----------|-------------------------------|
@@ -26,21 +24,21 @@ This project demonstrates the setup and configuration of a multi-site corporate 
 | Svendborg| 99   | 10.30.99.0/24 | RT03       | 10.30.99.1 | Management subnet             |
 | WAN Links| -    | 172.16.x.0/30 | RT01 ↔ RT02/03 | see notes | Point-to-point site connections |
 
-### Devices & Roles
+### Devices & Roles ⚙️
 
 | Device  | Role                           | Notes                       |
 |---------|--------------------------------|-----------------------------|
-| RT01    | NAT, OSPF, Router-on-a-Stick   | Internet via WAN DHCP       |
-| RT02    | OSPF, default route to RT01    | No direct Internet          |
-| RT03    | OSPF, default route to RT01    | No direct Internet          |
-| SW01-03 | VLAN config, trunk to respective router | Switches per site (physical hardware) |
-| Proxmox | Hosts virtual DCs (DC01, DC02), AD, DNS, DHCP | Odense site |
+| RT01    | NAT, OSPF, Router-on-a-Stick   | Internet via WAN DHCP 🌐     |
+| RT02    | OSPF, default route to RT01    | No direct Internet 🚫        |
+| RT03    | OSPF, default route to RT01    | No direct Internet 🚫        |
+| SW01-03 | VLAN config, trunk to respective router | Physical switches per site 🖧 |
+| Proxmox | Hosts virtual DCs (DC01, DC02), AD, DNS, DHCP | Odense site 🖥️ |
 
 ---
 
-## Testing & Verification
+## Testing & Verification ✅
 
-### Switch & Router Commands
+### Switch & Router Commands 🖥️
 
 ```bash
 # Switch
@@ -58,14 +56,16 @@ ping 8.8.8.8
 traceroute 8.8.8.8
 ```
 
-### SSH Access
+### SSH Access 🔐
+
 ```bash
 ssh admin@<switch_IP>
 show run | include username
 show ip ssh
 ```
 
-### WAN Connectivity
+### WAN Connectivity 🌉
+
 ```bash
 ping <remote site IP>
 show cdp neighbors
@@ -73,9 +73,9 @@ show cdp neighbors
 
 ---
 
-## Domain Controllers Setup (PowerShell)
+## Domain Controllers Setup (PowerShell) 💾
 
-### DC01 – Primary DC
+### DC01 – Primary DC 🏢
 
 ```powershell
 # Static IP & DNS
@@ -90,6 +90,7 @@ Install-WindowsFeature -Name AD-Domain-Services, DNS, FS-FileServer, DHCP -Inclu
 ```
 
 **Promote as Domain Controller:**
+
 ```powershell
 $DomainName = "torbenbyg.local"
 $DSRMPassword = ConvertTo-SecureString "torbenDSRM!2025" -AsPlainText -Force
@@ -97,7 +98,7 @@ $DSRMPassword = ConvertTo-SecureString "torbenDSRM!2025" -AsPlainText -Force
 Install-ADDSForest -DomainName $DomainName -SafeModeAdministratorPassword $DSRMPassword -InstallDNS -Force:$true
 ```
 
-### DC02 – Secondary DC / Failover
+### DC02 – Secondary DC / Failover 🏢
 
 ```powershell
 # Static IP & DNS
@@ -111,7 +112,8 @@ Install-WindowsFeature -Name AD-Domain-Services, DNS, DHCP -IncludeManagementToo
 Install-ADDSDomainController -DomainName $DomainName -Credential (Get-Credential) -InstallDNS -ReplicationSourceDC DC01.torbenbyg.local -Force:$true
 ```
 
-**Verify replication & DHCP failover:**
+**Verify replication & DHCP failover 🔄:**
+
 ```powershell
 repadmin /replsummary
 Get-ADDomainController -Filter *
@@ -122,30 +124,19 @@ Get-DhcpServerv4Failover
 
 ## Usage Instructions 🛠️
 
-1. **Setup Physical Devices:**
-   - Connect and power on physical routers (RT01-03) and switches (SW01-03).
-   - Configure VLANs, trunk/access ports, and IP addressing according to the network design.
-
-2. **Configure WAN Links:**
-   - Connect point-to-point WAN links between sites.
-   - Verify connectivity with `ping` and `show cdp neighbors`.
-
-3. **Domain Controllers:**
-   - Deploy virtual DC01 and DC02 in Proxmox.
-   - Run DC01 scripts sequentially: rename, pre-promotion setup, promote, post-promotion setup.
-   - Run DC02 scripts sequentially: rename & network setup, join domain, promote as additional DC, configure DHCP failover.
-
-4. **Verification:**
-   - Test VLAN connectivity with ping.
-   - Verify OSPF routing between sites.
-   - Confirm DHCP scopes and failover between DC01 and DC02.
-   - Check Active Directory replication.
+1. **Routers & Switches**: Configure physical routers (RT01, RT02, RT03) and switches (SW01, SW02, SW03) using the configs in `configs/routers/` and `configs/switches/`.
+2. **Domain Controllers**:
+   - DC01 scripts: Run `01-Rename-And-Restart.ps1`, restart, then run `the following PowerShell scripts`.
+   - DC02 scripts: Run `01-Rename-And-Network.ps1`, restart, then run `the following PowerShell scripts`.
+3. **Testing & Verification**: Use the commands in the Testing section to verify connectivity, VLANs, OSPF neighbors, NAT, DHCP, and AD replication.
+4. **Access**:
+   - SSH into switches using the provided credentials.
+   - Access virtual DCs via Proxmox console or remote PowerShell.
+5. **Notes**:
+   - VLANs segregate clients, servers, printers, and management traffic.
+   - WAN links simulate inter-site connectivity.
+   - All scripts and configs are ready to deploy on physical hardware and virtual DCs.
 
 ---
 
-## Notes 📝
-
-- VLANs separate clients, servers, printers, and management traffic.
-- WAN links simulate inter-site connectivity.
-- Routers and switches are physical; DCs run in virtual environment (Proxmox).
-- All commands and scripts provided should be executed in the specified ord
+✅ Fully tested and ready for a multi-site corporate lab setup.
