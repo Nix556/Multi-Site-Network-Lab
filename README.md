@@ -1,10 +1,12 @@
-# (Svendeprøve IT-supporter)
+# (Svendeprøve IT-supporter)  
 
 ## Overview
 
 This project demonstrates the setup and configuration of a multi-site corporate network with VLANs, OSPF routing, NAT, and Active Directory on virtual servers. The goal is to simulate a realistic corporate environment where multiple departments are connected via WAN links, with users and servers organized by department and function.
 
 **Sites:** Odense (primary, Internet-connected), Nyborg, Svendborg
+
+**Note:** Routers and switches are **physical hardware**, while Domain Controllers are virtualized.
 
 ---
 
@@ -31,7 +33,7 @@ This project demonstrates the setup and configuration of a multi-site corporate 
 | RT01    | NAT, OSPF, Router-on-a-Stick   | Internet via WAN DHCP       |
 | RT02    | OSPF, default route to RT01    | No direct Internet          |
 | RT03    | OSPF, default route to RT01    | No direct Internet          |
-| SW01-03 | VLAN config, trunk to respective router | Switches per site |
+| SW01-03 | VLAN config, trunk to respective router | Switches per site (physical hardware) |
 | Proxmox | Hosts virtual DCs (DC01, DC02), AD, DNS, DHCP | Odense site |
 
 ---
@@ -118,8 +120,32 @@ Get-DhcpServerv4Failover
 
 ---
 
-## Notes
+## Usage Instructions 🛠️
+
+1. **Setup Physical Devices:**
+   - Connect and power on physical routers (RT01-03) and switches (SW01-03).
+   - Configure VLANs, trunk/access ports, and IP addressing according to the network design.
+
+2. **Configure WAN Links:**
+   - Connect point-to-point WAN links between sites.
+   - Verify connectivity with `ping` and `show cdp neighbors`.
+
+3. **Domain Controllers:**
+   - Deploy virtual DC01 and DC02 in Proxmox.
+   - Run DC01 scripts sequentially: rename, pre-promotion setup, promote, post-promotion setup.
+   - Run DC02 scripts sequentially: rename & network setup, join domain, promote as additional DC, configure DHCP failover.
+
+4. **Verification:**
+   - Test VLAN connectivity with ping.
+   - Verify OSPF routing between sites.
+   - Confirm DHCP scopes and failover between DC01 and DC02.
+   - Check Active Directory replication.
+
+---
+
+## Notes 📝
 
 - VLANs separate clients, servers, printers, and management traffic.
 - WAN links simulate inter-site connectivity.
-- All configurations are performed in a virtualized environment (Proxmox).
+- Routers and switches are physical; DCs run in virtual environment (Proxmox).
+- All commands and scripts provided should be executed in the specified ord
