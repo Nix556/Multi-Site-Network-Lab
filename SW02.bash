@@ -4,14 +4,14 @@
 
 conf t
 
-! --- Hostname og domæne ---
+! --- Hostname and domain ---
 hostname SW02
 ip domain-name nyborg.local
 
-! --- Brugere til SSH ---
+! --- SSH Users ---
 username admin privilege 15 secret cisco
 
-! --- Generer RSA-nøgler ---
+! --- Generate RSA keys ---
 crypto key generate rsa modulus 2048
 ip ssh version 2
 
@@ -19,14 +19,14 @@ ip ssh version 2
 ! VLANs
 ! ==========================
 vlan 10
- name Klient
+ name Client
  exit
 vlan 99
  name Management
  exit
 
 ! ==========================
-! Trunk-port til router RT02
+! Trunk port to router RT02
 ! ==========================
 interface GigabitEthernet1/0/1
  switchport mode trunk
@@ -34,7 +34,7 @@ interface GigabitEthernet1/0/1
  exit
 
 ! ==========================
-! Access-porte for VLAN 10 - Klienter
+! Access ports for VLAN 10 - Clients
 ! ==========================
 interface range GigabitEthernet1/0/2 - 10
  switchport mode access
@@ -53,7 +53,7 @@ interface vlan 99
 ip default-gateway 10.20.99.1
 
 ! ==========================
-! VTY / SSH adgang
+! VTY / SSH Access
 ! ==========================
 line vty 0 4
  transport input ssh
@@ -63,7 +63,7 @@ line vty 0 4
  exit
 
 ! ==========================
-! Generelle services
+! General services
 ! ==========================
 service password-encryption
 no ip http server
