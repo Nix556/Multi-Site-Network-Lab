@@ -2,8 +2,8 @@
 
 ![Project Status](https://img.shields.io/badge/status-Complete-success)
 ![Platform](https://img.shields.io/badge/platform-Physical%20Routers%20%26%20Switches-blue)
+![Languages](https://img.shields.io/badge/languages-PowerShell%20%26%20CiscoConfigs-orange)
 ![Virtualization](https://img.shields.io/badge/virtualization-Proxmox-yellow)
-![Language](https://img.shields.io/badge/language-PowerShell-lightgrey)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ---
