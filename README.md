@@ -4,7 +4,7 @@
 ![Platform](https://img.shields.io/badge/platform-Physical%20Routers%20%26%20Switches-blue)
 ![Languages](https://img.shields.io/badge/languages-PowerShell%20%26%20CiscoConfigs-orange)
 ![Virtualization](https://img.shields.io/badge/virtualization-Proxmox-yellow)
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)  
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 ---
 
 ## Overview 🌐
