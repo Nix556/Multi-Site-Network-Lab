@@ -1,9 +1,9 @@
 <#
 .SYNOPSIS
-    Tilslutter DC02 til domænet torbenbyg.local
+    Joins DC02 to the torbenbyg.local domain.
 #>
 
-Write-Host "=== Trin 2: Tilslutter serveren til domænet ===" -ForegroundColor Cyan
+Write-Host "=== Step 2: Joining the server to the domain ===" -ForegroundColor Cyan
 
 $DomainName = "torbenbyg.local"
 
