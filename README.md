@@ -1,5 +1,14 @@
 # (Svendeprøve IT-supporter) 🚀
 
+![Project Status](https://img.shields.io/badge/status-Complete-success)
+![Platform](https://img.shields.io/badge/platform-Physical%20Routers%20%26%20Switches-blue)
+![Virtualization](https://img.shields.io/badge/virtualization-Proxmox-yellow)
+![Language](https://img.shields.io/badge/language-PowerShell-lightgrey)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
+
+---
+
 ## Overview 🌐
 
 This project demonstrates the setup and configuration of a multi-site corporate network with VLANs, OSPF routing, NAT, and Active Directory on virtual servers. The goal is to simulate a realistic corporate environment where multiple departments are connected via WAN links, with users and servers organized by department and function.
